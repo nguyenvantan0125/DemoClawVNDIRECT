@@ -1,11 +1,22 @@
 from selenium import  webdriver
-import time
 
 driver = webdriver.Chrome(executable_path =r'D:\VNDIRECT\DemoClawVNDIRECT\chromedriver.exe' )
-driver.get("https://www.google.com/")
+driver.get("https://trade.vndirect.com.vn/chung-khoan/danh-muc")
 
+eleUser = driver.find_element_by_css_selector("input[name='username']")
+elePassword =  driver.find_element_by_css_selector("input[name='password']")
+eleSubmit= driver.find_element_by_xpath("//span[text()='Đăng nhập']")
+
+def Login(user, password):
+    eleUser.send_keys(user)
+    elePassword.send_keys(password)
+    eleSubmit.click
+
+Login("nguyenvantan0125","Vantan@252525")
 print(driver.title)
-el = driver.find_element_by_name("q")
-el.send_keys("Hinh hoc")
-el.submit()
+el = driver.find_element_by_css_selector("#TPBbP3")
+print(el.text)
+el.click
+el.click
+
 driver.quit()
