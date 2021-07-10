@@ -15,6 +15,7 @@ def Login(user, password):
     eleSubmit.submit()
 
 Login("nguyenvantan0125","Vantan@252525")
-el = driver.Get("#TPBbP3")
-print(el.text)
-#driver.Quit()
+
+#el = driver.Get("#TPBbP3")
+driver.tearDown()
+

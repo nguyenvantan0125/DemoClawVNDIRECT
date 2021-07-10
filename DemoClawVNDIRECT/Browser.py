@@ -13,5 +13,6 @@ class Browser:
             return self.driver.find_element(By.XPATH,element)
         else:
             return self.driver.find_element(By.CSS_SELECTOR,element)
+
     def tearDown(self):
         self.driver.quit()
