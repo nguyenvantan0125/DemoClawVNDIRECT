@@ -5,6 +5,7 @@ Vnpage.Loadpage("https://cafef.vn/")
 #Vnpage.Loadpage("https://trade.vndirect.com.vn/chung-khoan/vn30")
 
 Vnpage.SearchByCode()
+Vnpage.TestListElemeny()
 #Vnpage.Login("nguyenvantan","Vantan@252525")
 
 # Vnpage.tearDown()
