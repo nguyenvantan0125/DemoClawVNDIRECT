@@ -1,8 +1,9 @@
-from typing import SupportsIndex
 from selenium import  webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import pandas as pd 
+
 
 class Browser:
     def __init__(self, pathdriver): # khoi tao browser vs chrome driver
@@ -28,13 +29,16 @@ class Browser:
 
 class CafeF(Browser):
 
-    dctMetric = {
-        "listROS" : [],
-        "listROA" : [],
-        "listROE" : [],
-        "listGOS" : [],
-        "listDAR" : [],
-    }
+    # dctMetric = {
+    #     "listROS" : [],
+    #     "listROA" : [],
+    #     "listROE" : [],
+    #     "listGOS" : [],
+    #     "listDAR" : [],
+    #     "listPE" : []
+    # }
+
+    dctMetric = {}
 
     def __init__(self, pathdriver):
         super().__init__(pathdriver)
@@ -51,7 +55,8 @@ class CafeF(Browser):
         return super().Get("//a[contains(text(),'EPS pha loãng')]/following::div[1]")
 
     # get list element and get multiple text
-    
+    def elePEs(self):
+        return super().GetMutiple("//label[contains(text(),'P/E')]/parent::*/following-sibling::*[not(@class='chart')]")
     def eleROAs(self):
         return super().GetMutiple("//label[contains(text(),'ROA')]/parent::*/following-sibling::*[not(@class='chart')]")
     def eleROEs(self):
@@ -62,19 +67,49 @@ class CafeF(Browser):
         return super().GetMutiple("//label[contains(text(),'GOS')]/parent::*/following-sibling::*[not(@class='chart')]")
     def eleDARs(self):
         return super().GetMutiple("//label[contains(text(),'DAR')]/parent::*/following-sibling::*[not(@class='chart')]")
-
+    
     def SearchByCode(self):
         #Code = str(input("Stock cODE: "))
         self.eleSearchBox().send_keys("FPT")
-        self.eleSubmit().click()
+        self.eleSubmit().click()    
     
-    # successful
-    def TestListElemeny(self):
+    def GetListPE(self):
+        listPE = self.elePEs
+        for i in listPE:
+            self.dctMetric["listPE"].append(i.text)
+
+    def GetListROS(self):
+        listelement = self.eleROAs()
+        for i in listelement:
+            self.dctMetric["listROS"].append(i.text)
+    
+    def GetListROA(self):
         listROS = self.eleROSs()
         for i in listROS:
-            self.dctMetric["listROS"].append(i.text)
+            self.dctMetric["listROA"].append(i.text)
+    
+    def GetListROE(self):
+        listROS = self.eleROEs()
+        for i in listROS:
+            self.dctMetric["listROE"].append(i.text)
 
+    def GetListGOS(self):
+        listGOS = self.eleGOSs()
+        for i in listGOS:
+            self.dctMetric["listGOS"].append(i.text)
 
+    def GetListDAR(self):
+        listDAR = self.eleDARs()
+        for i in listDAR:
+            self.dctMetric["listDAR"].append(i.text)
+
+    def GetInfoDict(self):
+        self.GetListDAR()
+        self.GetListGOS()
+        self.GetListPE()
+        self.GetListROA()
+        self.GetListROE()
+        self.GetListROS()
 
 
 class VndirectPage(Browser):
