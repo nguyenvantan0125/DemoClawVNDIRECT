@@ -126,9 +126,8 @@ class CafeF(Browser):
         self.GetListROS()
 
     def CreatTable(self):
-        self.GetInfoDict()
-        print(self.dctMetric.keys())
-        data = pd.DataFrame.from_dict(self.dctMetric)
+        self.GetInfoDict()        
+        data = pd.DataFrame.from_dict(self.dctMetric,orient='index')
         print(data)
 
 class VndirectPage(Browser):
