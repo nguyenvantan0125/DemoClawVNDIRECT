@@ -1,3 +1,4 @@
+import time
 from selenium import  webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -70,38 +71,51 @@ class CafeF(Browser):
     
     def SearchByCode(self):
         #Code = str(input("Stock cODE: "))
+        time.sleep(1)
         self.eleSearchBox().send_keys("FPT")
-        self.eleSubmit().click()    
-    
+        self.eleSubmit().click()
+
     def GetListPE(self):
-        listPE = self.elePEs
+        listPE = self.elePEs()
+        temp = []
         for i in listPE:
-            self.dctMetric["listPE"].append(i.text)
+            temp.append(i.text)
+        self.dctMetric["listPE"] = temp
 
     def GetListROS(self):
         listelement = self.eleROAs()
+        temp =[]
         for i in listelement:
-            self.dctMetric["listROS"].append(i.text)
-    
+            temp.append(i.text)
+        self.dctMetric["listROS"] = temp
+
     def GetListROA(self):
         listROS = self.eleROSs()
+        temp = []
         for i in listROS:
-            self.dctMetric["listROA"].append(i.text)
+            temp.append(i.text)
+        self.dctMetric["listROA"] = temp
     
     def GetListROE(self):
         listROS = self.eleROEs()
+        temp = []
         for i in listROS:
-            self.dctMetric["listROE"].append(i.text)
+            temp.append(i.text)
+        self.dctMetric["listROE"] = temp
 
     def GetListGOS(self):
         listGOS = self.eleGOSs()
+        temp = []
         for i in listGOS:
-            self.dctMetric["listGOS"].append(i.text)
+            temp.append(i.text)
+        self.dctMetric["listGOS"] = temp
 
     def GetListDAR(self):
         listDAR = self.eleDARs()
+        temp = []
         for i in listDAR:
-            self.dctMetric["listDAR"].append(i.text)
+            temp.append(i.text)
+        self.dctMetric["listDAR"] = temp
 
     def GetInfoDict(self):
         self.GetListDAR()
@@ -111,6 +125,11 @@ class CafeF(Browser):
         self.GetListROE()
         self.GetListROS()
 
+    def CreatTable(self):
+        self.GetInfoDict()
+        print(self.dctMetric.keys())
+        data = pd.DataFrame.from_dict(self.dctMetric)
+        print(data)
 
 class VndirectPage(Browser):
     
