@@ -30,16 +30,8 @@ class Browser:
 
 class CafeF(Browser):
 
-    # dctMetric = {
-    #     "listROS" : [],
-    #     "listROA" : [],
-    #     "listROE" : [],
-    #     "listGOS" : [],
-    #     "listDAR" : [],
-    #     "listPE" : []
-    # }
-
     dctMetric = {}
+    lstAnual = []
 
     def __init__(self, pathdriver):
         super().__init__(pathdriver)
@@ -48,14 +40,22 @@ class CafeF(Browser):
         return super().Get("#CafeF_SearchKeyword_Company")
     def eleSubmit(self):
         return super().Get(".s-submit")
-    def elePE(self):
-        return super().Get("//b[contains(text(),'P/E')]/following::div[1]")
     def eleBasicEPS(self):
         return super().Get("//a[contains(text(),'EPS cơ bản')]/following::div[1]")
     def eleDilutionEPS(self):
         return super().Get("//a[contains(text(),'EPS pha loãng')]/following::div[1]")
 
+    def Getinfor(self,eleList,KeyDict):
+        temp = []
+        for i in eleList:
+            temp.append(i.text)
+        self.dctMetric[KeyDict] = temp
+    
     # get list element and get multiple text
+    def eleYears(self):
+        return super().GetMutiple("//th[contains(text(),'Chỉ tiêu tài chính')]/following-sibling::*[@class='data']")
+    def eleBasicEPSs(self):
+        return super().GetMutiple("//label[contains(text(),'EPS')]/parent::*/following-sibling::*[not(@class='chart')]")
     def elePEs(self):
         return super().GetMutiple("//label[contains(text(),'P/E')]/parent::*/following-sibling::*[not(@class='chart')]")
     def eleROAs(self):
@@ -72,62 +72,28 @@ class CafeF(Browser):
     def SearchByCode(self):
         #Code = str(input("Stock cODE: "))
         time.sleep(1)
-        self.eleSearchBox().send_keys("FPT")
+        self.eleSearchBox().send_keys("SCS")
         self.eleSubmit().click()
 
-    def GetListPE(self):
-        listPE = self.elePEs()
-        temp = []
-        for i in listPE:
-            temp.append(i.text)
-        self.dctMetric["listPE"] = temp
+    def GetAnual(self):
+        for i in self.eleYears():
+            self.lstAnual.append(i.text)
 
-    def GetListROS(self):
-        listelement = self.eleROAs()
-        temp =[]
-        for i in listelement:
-            temp.append(i.text)
-        self.dctMetric["listROS"] = temp
-
-    def GetListROA(self):
-        listROS = self.eleROSs()
-        temp = []
-        for i in listROS:
-            temp.append(i.text)
-        self.dctMetric["listROA"] = temp
-    
-    def GetListROE(self):
-        listROS = self.eleROEs()
-        temp = []
-        for i in listROS:
-            temp.append(i.text)
-        self.dctMetric["listROE"] = temp
-
-    def GetListGOS(self):
-        listGOS = self.eleGOSs()
-        temp = []
-        for i in listGOS:
-            temp.append(i.text)
-        self.dctMetric["listGOS"] = temp
-
-    def GetListDAR(self):
-        listDAR = self.eleDARs()
-        temp = []
-        for i in listDAR:
-            temp.append(i.text)
-        self.dctMetric["listDAR"] = temp
 
     def GetInfoDict(self):
-        self.GetListDAR()
-        self.GetListGOS()
-        self.GetListPE()
-        self.GetListROA()
-        self.GetListROE()
-        self.GetListROS()
+        self.Getinfor(self.eleDARs(),"DAR")
+        self.Getinfor(self.eleGOSs(),"GOR")
+        self.Getinfor(self.elePEs(),"lPE")
+        self.Getinfor(self.eleBasicEPSs(),"EPS")
+        self.Getinfor(self.eleROSs(),"ROS")
+        self.Getinfor(self.eleROAs(),"ROA")
+        self.Getinfor(self.eleROEs(),"ROE")
+        self.GetAnual()
+
 
     def CreatTable(self):
         self.GetInfoDict()        
-        data = pd.DataFrame.from_dict(self.dctMetric,orient='index')
+        data = pd.DataFrame.from_dict(self.dctMetric,orient='index',columns= self.lstAnual)
         print(data)
 
 class VndirectPage(Browser):
