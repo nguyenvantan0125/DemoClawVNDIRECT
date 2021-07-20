@@ -79,22 +79,22 @@ class CafeF(Browser):
         for i in self.eleYears():
             self.lstAnual.append(i.text)
 
-
     def GetInfoDict(self):
         self.Getinfor(self.eleDARs(),"DAR")
         self.Getinfor(self.eleGOSs(),"GOR")
-        self.Getinfor(self.elePEs(),"lPE")
+        self.Getinfor(self.elePEs(),"PE")
         self.Getinfor(self.eleBasicEPSs(),"EPS")
         self.Getinfor(self.eleROSs(),"ROS")
         self.Getinfor(self.eleROAs(),"ROA")
         self.Getinfor(self.eleROEs(),"ROE")
         self.GetAnual()
 
-
     def CreatTable(self):
         self.GetInfoDict()        
-        data = pd.DataFrame.from_dict(self.dctMetric,orient='index',columns= self.lstAnual)
-        print(data)
+        data = pd.DataFrame.from_dict(self.dctMetric,orient='index',columns= self.lstAnual,dtype = float)
+        df_percent = data.pct_change(axis='columns',)
+        result = pd.concat([data,df_percent*100], axis= 1)
+        print(result)
 
 class VndirectPage(Browser):
     
