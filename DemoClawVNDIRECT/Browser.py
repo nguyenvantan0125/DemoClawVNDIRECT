@@ -125,8 +125,8 @@ class CafeF(Browser):
     def CompanyAsset(self):
         self.GetAsset()
         data = pd.DataFrame.from_dict(self.dct_Asset,orient='index',columns= self.lstAnual)
-        data = data.apply(lambda col: col.str.replace(',', ''))
-        data = data.astype(int64)
+        data = data.apply(lambda col: col.str.replace(',', '')).astype(int64)
+        #data = data
         df_percent = data.pct_change(axis='columns')
         result = pd.concat([data,df_percent*100], axis= 1)
         print(result)
