@@ -6,7 +6,8 @@ Vnpage.Loadpage("https://cafef.vn/")
 
 Vnpage.SearchByCode()
 Vnpage.CompanyAsset()
-#Vnpage.Login("nguyenvantan","Vantan@252525")
+Vnpage.FinancialRatios()
+#Vnpage.Login("nguyenvantan","Vantan@2525.25")
 
 Vnpage.tearDown()
 

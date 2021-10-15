@@ -115,20 +115,23 @@ class CafeF(Browser):
         for i in self.eleQuarter():
             self.lstAnual.append(i.text)
 
+    def CreateDF(self,dict):
+        data = pd.DataFrame.from_dict(dict,orient='index',columns= self.lstAnual,dtype = float)
+        df_percent = data.pct_change(axis='columns')        
+        result = pd.concat([data,df_percent*100], axis= 1)
+        self.lstAnual.clear()
+        return result
+
     def FinancialRatios(self):
         self.GetFinancialRatios()        
-        data = pd.DataFrame.from_dict(self.dct_FiRatios,orient='index',columns= self.lstAnual,dtype = float)
-        df_percent = data.pct_change(axis='columns')
-        result = pd.concat([data,df_percent*100], axis= 1)
+        result = self.CreateDF(self.dct_FiRatios)
         print(result)
 
     def CompanyAsset(self):
         self.GetAsset()
-        data = pd.DataFrame.from_dict(self.dct_Asset,orient='index',columns= self.lstAnual)
-        data = data.apply(lambda col: col.str.replace(',', '')).astype(int64)
-        #data = data
-        df_percent = data.pct_change(axis='columns')
-        result = pd.concat([data,df_percent*100], axis= 1)
+        for k,v in self.dct_Asset.items():
+            self.dct_Asset[k] = [i.replace(",","") for i in v ]/1000
+        result = self.CreateDF(self.dct_Asset)
         print(result)
 
 class VndirectPage(Browser):
